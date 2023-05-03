@@ -1,0 +1,50 @@
+package com.accountrix.banxi.service.plaid;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import com.plaid.client.ApiClient;
+import com.plaid.client.model.*;
+import com.plaid.client.request.PlaidApi;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+@Configuration
+public class PlaidConfiguration {
+
+//    private static final String PLAID_BASE_URL = "https://sandbox.plaid.com";
+    private static final String plaidClientID = "***REMOVED***";
+    private static final String plaidSecret = "***REMOVED***";
+//    private static final String PLAID_VERSION = "2020-09-14";
+
+    @Bean
+    public PlaidApi plaidClient() {
+        HashMap<String, String> apiKeys = new HashMap<String, String>();
+        apiKeys.put("clientId", "***REMOVED***");
+        apiKeys.put("secret", "***REMOVED***");
+        apiKeys.put("plaidVersion", "2020-09-14");
+        ApiClient apiClient;
+        apiClient = new ApiClient(apiKeys);
+        apiClient.setPlaidAdapter(ApiClient.Sandbox);// or equivalent, depending on which environment you're calling into
+        return apiClient.createService(PlaidApi.class);
+    }
+
+    public static String getPlaidClientID() {
+        return plaidClientID;
+    }
+
+    public static String getPlaidSecret() {
+        return plaidSecret;
+    }
+
+}
