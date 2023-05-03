@@ -16,10 +16,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
 
@@ -30,6 +27,7 @@ import java.util.Optional;
 
 @PageTitle("Banxi | Institution Link")
 @Route(value = "/link", layout = MainLayout.class)
+@RouteAlias(value = "/link/oauth", layout = MainLayout.class)
 @PermitAll
 public class LinkView extends VerticalLayout implements BeforeEnterObserver {
 
@@ -40,6 +38,8 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
     private User currentUser;
 
     private final Dialog activityIndicator = new Dialog();
+
+    private boolean oauthDetected = false;
 
     public LinkView(AuthenticationContext authContext, PlaidService plaid) {
         this.authContext = authContext;
@@ -82,13 +82,13 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
     }
 
     private void injectLinkHandler(String linkToken) {
-        UI.getCurrent().getPage().executeJs(
+        UI.getCurrent().getPage().executeJs(String.format(
                 """
                             window.handler = Plaid.create({
                                 token: $0,
-                                receivedRedirectUri: window.location.href,
+                                %s
                                 onSuccess: async (publicToken, metadata) => {
-                                    window.location.replace("https://temecula.salmanburhan.com/banxi/link?publicToken=" + publicToken);
+                                    window.location.replace("https://temecula.salmanburhan.com:9999/link?publicToken=" + publicToken);
                                 },
                                 onEvent: (eventName, metadata) => {
                                     console.log("Event:", eventName);
@@ -99,8 +99,8 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
                                 },
                             });
                             window.handler.open();
-                        """
-        , linkToken);
+                        """, (oauthDetected) ? "receivedRedirectUri: window.location.href," : ""
+        ), linkToken);
     }
 
     private void addLinkedInstitutionsGrid() {
@@ -131,8 +131,11 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
             String publicToken = parameters.get("publicToken").get(0);
             if (plaid.exchangeToken(publicToken, currentUser)) {
                 // TODO: Change This To Dashboard Page Once Implemented.
-                beforeEnterEvent.forwardTo("settings");
+                UI.getCurrent().navigate("transactions");
             }
+        } else if(beforeEnterEvent.getLocation().getPath().contains("oauth")) {
+            System.out.println("OAUTH DETECTED");
+            oauthDetected = true;
         }
     }
 }
