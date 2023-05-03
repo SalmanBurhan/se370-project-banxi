@@ -1,5 +1,7 @@
 package com.accountrix.banxi.service.plaid;
 
+import com.accountrix.banxi.model.plaid.PlaidItemService;
+import com.accountrix.banxi.model.plaid.item.PlaidItem;
 import com.accountrix.banxi.model.user.User;
 import com.plaid.client.model.*;
 import com.plaid.client.request.PlaidApi;
@@ -27,10 +29,12 @@ public class PlaidService {
 
     private final transient PlaidApi client;
     private final transient AuthenticationContext authContext;
+    private final transient PlaidItemService plaidItemService;
     private Hashtable<String, Institution> cachedInstitutions = new Hashtable<>();
-    public PlaidService(PlaidApi plaidClient, AuthenticationContext authContext) {
+    public PlaidService(PlaidApi plaidClient, AuthenticationContext authContext, PlaidItemService plaidItemService) {
         this.client = plaidClient;
         this.authContext = authContext;
+        this.plaidItemService = plaidItemService;
     }
 
     private Optional<User> getUser() { return authContext.getAuthenticatedUser(User.class); }
@@ -142,25 +146,49 @@ public class PlaidService {
         return accounts;
     }
 
-    /*
-    public String createLinkToken() throws IOException {
+    public Optional<String> createLinkToken(User user) {
+        System.out.printf("createLinkToken for %s (%s)\n", user.getFullName(), user.getClientID());
         LinkTokenCreateRequestUser userRequest = new LinkTokenCreateRequestUser()
-                .clientUserId("foo");
+                .clientUserId(user.getClientID());
+
         LinkTokenCreateRequest linkTokenRequest = new LinkTokenCreateRequest()
+                .clientId(PlaidConfiguration.getPlaidClientID())
+                .secret(PlaidConfiguration.getPlaidSecret())
                 .clientName("Banxi")
                 .language("en")
-                .addProductsItem(Products.AUTH)
-                .addProductsItem(Products.TRANSACTIONS)
-                .addProductsItem(Products.BALANCE)
-                .addCountryCodesItem(CountryCode.US)
-                .user(userRequest)
-                .clientId(PLAID_CLIENT_ID)
-                .secret(PLAID_SECRET);
-        Response<LinkTokenCreateResponse> response = plaidClient
-                .linkTokenCreate(linkTokenRequest)
-                .execute();
-        return response.body().getLinkToken();
+                .countryCodes(Arrays.asList(CountryCode.US))
+                .products(Arrays.asList(Products.AUTH, Products.TRANSACTIONS))
+                .redirectUri("https://temecula.salmanburhan.com/banxi/link/oauth")
+                .user(userRequest);
+
+        Response<LinkTokenCreateResponse> response = null;
+        try { response = client.linkTokenCreate(linkTokenRequest).execute(); }
+        catch (IOException e) { System.out.println("unable to create link token"); return Optional.empty(); }
+        System.out.println(response.toString());
+        if (response.isSuccessful() && response.body() != null) {
+            System.out.printf("link token: %s\n", response.body().getLinkToken());
+            return Optional.ofNullable(response.body().getLinkToken());
+        } else {
+            return Optional.empty();
+        }
     }
-    */
+
+    public boolean exchangeToken(String publicToken, User user) {
+        ItemPublicTokenExchangeRequest request = new ItemPublicTokenExchangeRequest()
+                .clientId(PlaidConfiguration.getPlaidClientID())
+                .secret(PlaidConfiguration.getPlaidSecret())
+                .publicToken(publicToken);
+        Response<ItemPublicTokenExchangeResponse> response = null;
+        try { response = client.itemPublicTokenExchange(request).execute(); }
+        catch (IOException e) { return false; }
+        if (response.isSuccessful() && response.body() != null) {
+            String itemID = response.body().getItemId();
+            String accessToken = response.body().getAccessToken();
+            PlaidItem newPlaidItem = new PlaidItem(itemID, accessToken, user);
+            return plaidItemService.create(newPlaidItem) != null;
+        } else {
+            return false;
+        }
+    }
 
 }

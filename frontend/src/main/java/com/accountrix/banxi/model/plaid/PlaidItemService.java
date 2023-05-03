@@ -20,8 +20,10 @@ public class PlaidItemService {
 //    }
 
     public PlaidItem update(PlaidItem item) {
-        return this.repository.save(item);
+        return this.repository.saveAndFlush(item);
     }
+
+    public PlaidItem create(PlaidItem item) { return this.repository.saveAndFlush(item); }
 
     public void delete(Long id) {
         this.repository.deleteById(id);
