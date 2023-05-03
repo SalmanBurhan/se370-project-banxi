@@ -38,7 +38,7 @@ public class UserService implements AbstractUserService {
     @Override
     public User create(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return this.userRepository.save(user);
+        return this.userRepository.saveAndFlush(user);
     }
 
     @Override

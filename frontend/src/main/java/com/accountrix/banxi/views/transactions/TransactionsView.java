@@ -42,7 +42,6 @@ import java.util.function.Consumer;
 @PermitAll
 @PageTitle("Transactions")
 @Route(value = "transactions", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 public class TransactionsView extends VerticalLayout {
 
     private final transient AuthenticationContext authContext;

@@ -21,11 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class PlaidConfiguration {
-
-//    private static final String PLAID_BASE_URL = "https://sandbox.plaid.com";
     private static final String plaidClientID = "56c949d37c1539e11d919abc";
     private static final String plaidSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
-//    private static final String PLAID_VERSION = "2020-09-14";
 
     @Bean
     public PlaidApi plaidClient() {
