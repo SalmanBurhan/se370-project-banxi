@@ -23,13 +23,13 @@ import java.util.concurrent.TimeUnit;
 public class PlaidConfiguration {
 
     // Development Mode
-    private static final String plaidClientID = "56c949d37c1539e11d919abc";
-    private static final String plaidSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
-    private static final String plaidEnvironment = ApiClient.Sandbox;
+//    private static final String plaidClientID = "56c949d37c1539e11d919abc";
+//    private static final String plaidSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
+//    private static final String plaidEnvironment = ApiClient.Sandbox;
     // Sandbox Mode
-    //private static final String plaidClientID = "645862fc1c80a20018c351a6";
-    //private static final String plaidSecret = "c969234d7678433c333d9096b1d763";
-    //private static final String plaidEnvironment = ApiClient.Development;
+    private static final String plaidClientID = "645862fc1c80a20018c351a6";
+    private static final String plaidSecret = "c969234d7678433c333d9096b1d763";
+    private static final String plaidEnvironment = ApiClient.Development;
 
     @Bean
     public PlaidApi plaidClient() {
