@@ -1,0 +1,17 @@
+{
+  "productionMode": false,
+  "eagerServerLoad": false,
+  "npmFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend",
+  "node.version": "v18.14.1",
+  "node.download.root": "https://nodejs.org/dist/",
+  "generatedFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/frontend",
+  "frontendFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/frontend",
+  "connect.javaSourceFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/src/main/java",
+  "javaResourceFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/src/main/resources",
+  "connect.applicationProperties": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/src/main/resources/application.properties",
+  "connect.openApiFile": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/generated-resources/openapi.json",
+  "project.frontend.generated": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/frontend/generated",
+  "pnpm.enable": false,
+  "require.home.node": false,
+  "build.folder": "target"
+}

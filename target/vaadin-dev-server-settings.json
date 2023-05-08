@@ -1,0 +1,18 @@
+{
+  "frontendFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/frontend/generated/jar-resources",
+  "staticOutput": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/src/main/dev-bundle/webapp",
+  "devBundleStatsOutput": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/src/main/dev-bundle/config",
+  "jarResourcesFolder": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/frontend/generated/jar-resources",
+  "generatedFlowImportsFolder": "target/frontend",
+  "themeName": "banxi",
+  "clientServiceWorkerSource": "/Users/salmanburhan/Documents/School/CSUSM/SE 370/se370-project-banxi/frontend/target/sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}
