@@ -110,27 +110,12 @@ public class LinkView extends VerticalLayout {
         UI ui = UI.getCurrent();
         AsyncManager.register(this, task -> {
             System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
-
-            IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
-            processingAnimation.setWidth(50, Unit.PERCENTAGE);
-
-            IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
-            successAnimation.setWidth(50, Unit.PERCENTAGE);
-
-            task.push(() -> {
-                add(processingAnimation);
-
-                try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-                remove(processingAnimation);
-
-                add(successAnimation);
-
-                try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-                remove(successAnimation);
-
-                System.out.println("LINK COMPLETE, REDIRECTING TO DASHBOARD");
-                ui.navigate("dashboard");
-            });
+            if (plaid.exchangeToken(publicToken, currentUser)) {
+                System.out.println("LINK COMPLETED SUCCESSFULLY, REDIRECTING TO DASHBOARD");
+                task.push(() -> ui.navigate("dashboard"));
+            } else {
+                task.push(() -> ui.add(new ErrorView("The Link Flow Failed")));
+            }
         });
     }
 }
