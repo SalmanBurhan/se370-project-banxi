@@ -7,7 +7,9 @@ import com.accountrix.banxi.views.error.ErrorView;
 import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.IFrame;
 import com.vaadin.flow.component.html.Pre;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -19,6 +21,7 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @PageTitle("Banxi | Institution Link")
 @Route(value = "/link/oauth", layout = MainLayout.class)
@@ -50,7 +53,6 @@ public class OAuthView extends VerticalLayout {
         setupLink();
         injectLinkHandler();
         activityIndicator.setVisible(false);
-        UI.getCurrent().getPage().executeJs("window.exchangeToken('someToken', $0);", getElement());
     }
 
     private void addDependencies() {
@@ -101,7 +103,21 @@ public class OAuthView extends VerticalLayout {
 
     @ClientCallable
     public void exchangeToken(String publicToken) {
-        System.out.println("Exchanging Public Token " + publicToken + " for Access Token (OAUTH)");
+        IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
+        processingAnimation.setWidth(50, Unit.PERCENTAGE);
+        add(processingAnimation);
+
+        System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
+        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
+        remove(processingAnimation);
+
+        IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
+        successAnimation.setWidth(50, Unit.PERCENTAGE);
+        add(successAnimation);
+        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
+        remove(successAnimation);
+
+        UI.getCurrent().navigate("dashboard");
     }
 
 }
