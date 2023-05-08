@@ -21,18 +21,25 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class PlaidConfiguration {
+
+    // Development Mode
     private static final String plaidClientID = "56c949d37c1539e11d919abc";
     private static final String plaidSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
+    private static final String plaidEnvironment = ApiClient.Sandbox;
+    // Sandbox Mode
+    //private static final String plaidClientID = "645862fc1c80a20018c351a6";
+    //private static final String plaidSecret = "c969234d7678433c333d9096b1d763";
+    //private static final String plaidEnvironment = ApiClient.Development;
 
     @Bean
     public PlaidApi plaidClient() {
         HashMap<String, String> apiKeys = new HashMap<String, String>();
-        apiKeys.put("clientId", "56c949d37c1539e11d919abc");
-        apiKeys.put("secret", "e2aa3bc2bc8d8f96a9d540460b8831");
+        apiKeys.put("clientId", plaidClientID);
+        apiKeys.put("secret", plaidSecret);
         apiKeys.put("plaidVersion", "2020-09-14");
         ApiClient apiClient;
         apiClient = new ApiClient(apiKeys);
-        apiClient.setPlaidAdapter(ApiClient.Sandbox);// or equivalent, depending on which environment you're calling into
+        apiClient.setPlaidAdapter(plaidEnvironment);
         return apiClient.createService(PlaidApi.class);
     }
 
