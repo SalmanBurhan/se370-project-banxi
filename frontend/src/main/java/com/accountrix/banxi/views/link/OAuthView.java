@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
+import org.vaadin.flow.helper.AsyncManager;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -85,23 +86,16 @@ public class OAuthView extends VerticalLayout {
 
     @ClientCallable
     public void exchangeToken(String publicToken) {
-        System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
-
-        IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
-        processingAnimation.setWidth(50, Unit.PERCENTAGE);
-        UI.getCurrent().accessSynchronously(() -> add(processingAnimation));
-
-        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        UI.getCurrent().accessSynchronously(() -> remove(processingAnimation));
-
-        IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
-        successAnimation.setWidth(50, Unit.PERCENTAGE);
-        UI.getCurrent().accessSynchronously(() -> add(successAnimation));
-        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        UI.getCurrent().accessSynchronously(() -> remove(successAnimation));
-
-        System.out.println("LINK COMPLETE, REDIRECTING TO DASHBOARD");
-        UI.getCurrent().navigate("dashboard");
+        UI ui = UI.getCurrent();
+        AsyncManager.register(this, task -> {
+            System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
+            if (plaid.exchangeToken(publicToken, currentUser)) {
+                System.out.println("LINK COMPLETED SUCCESSFULLY, REDIRECTING TO DASHBOARD");
+                task.push(() -> ui.navigate("dashboard"));
+            } else {
+                task.push(() -> ui.add(new ErrorView("The Link Flow Failed")));
+            }
+        });
     }
 
 }
