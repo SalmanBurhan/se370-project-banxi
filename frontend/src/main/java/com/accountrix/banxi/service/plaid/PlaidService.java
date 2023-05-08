@@ -234,7 +234,7 @@ public class PlaidService {
                 .clientName("Banxi")
                 .language("en")
                 .countryCodes(Arrays.asList(CountryCode.US))
-                .products(Arrays.asList(Products.AUTH, Products.TRANSACTIONS))
+                .products(Arrays.asList(Products.TRANSACTIONS))
                 .redirectUri("https://temecula.salmanburhan.com/banxi/link/oauth")
                 .user(userRequest);
 
