@@ -4,6 +4,7 @@ package com.accountrix.banxi.views;
 import com.accountrix.banxi.components.appnav.AppNav;
 import com.accountrix.banxi.components.appnav.AppNavItem;
 import com.accountrix.banxi.service.security.SecurityService;
+import com.accountrix.banxi.views.dashboard.Dashboard;
 import com.accountrix.banxi.views.link.LinkView;
 import com.accountrix.banxi.views.transactions.TransactionsView;
 import com.accountrix.banxi.views.settings.SettingsView;
@@ -69,7 +70,8 @@ public class MainLayout extends AppLayout {
 
         AppNav nav = new AppNav();
 
-        nav.addItem(new AppNavItem("Link", LinkView.class));
+        //nav.addItem(new AppNavItem("Link", LinkView.class));
+        nav.addItem(new AppNavItem("Dashboard", Dashboard.class, LineAwesomeIcon.CHART_LINE_SOLID.create()));
         nav.addItem(new AppNavItem("Transactions", TransactionsView.class, LineAwesomeIcon.RECEIPT_SOLID.create()));
         nav.addItem(new AppNavItem("Settings", SettingsView.class, LineAwesomeIcon.TOOLS_SOLID.create()));
 
