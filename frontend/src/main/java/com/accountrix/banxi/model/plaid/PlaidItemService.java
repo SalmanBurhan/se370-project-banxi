@@ -1,6 +1,7 @@
 package com.accountrix.banxi.model.plaid;
 
 import com.accountrix.banxi.model.plaid.item.PlaidItem;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,8 +12,11 @@ public class PlaidItemService {
 
     private final PlaidItemRepository repository;
 
-    public PlaidItemService(PlaidItemRepository repository) {
+    private final EntityManager manager;
+
+    public PlaidItemService(PlaidItemRepository repository, EntityManager manager) {
         this.repository = repository;
+        this.manager = manager;
     }
 
 //    public Optional<PlaidItem> get(String ID) {
@@ -20,10 +24,14 @@ public class PlaidItemService {
 //    }
 
     public PlaidItem update(PlaidItem item) {
-        return this.repository.saveAndFlush(item);
+        return this.create(item); // Create or Update, tbh.
     }
 
-    public PlaidItem create(PlaidItem item) { return this.repository.saveAndFlush(item); }
+    public PlaidItem create(PlaidItem item) {
+        PlaidItem newItem = this.repository.saveAndFlush(item);
+        this.manager.refresh(newItem);
+        return newItem;
+    }
 
     public void delete(Long id) {
         this.repository.deleteById(id);

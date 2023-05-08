@@ -1,6 +1,7 @@
 package com.accountrix.banxi.service.user;
 
 import com.accountrix.banxi.model.user.User;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +17,11 @@ import java.util.Optional;
 public class UserService implements AbstractUserService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final EntityManager manager;
+
+    public UserService(UserRepository userRepository, EntityManager manager) {
         this.userRepository = userRepository;
+        this.manager = manager;
     }
 
     @Override
