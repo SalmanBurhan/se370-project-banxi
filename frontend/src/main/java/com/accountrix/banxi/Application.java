@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 //@EnableAsync
 //@Push
-@Theme(value = "banxi", variant = Lumo.DARK)
+@Theme(value = "banxi", variant = Lumo.LIGHT)
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {

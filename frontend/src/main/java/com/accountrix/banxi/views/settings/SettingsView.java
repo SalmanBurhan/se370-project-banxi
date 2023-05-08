@@ -66,7 +66,7 @@ public class SettingsView extends VerticalLayout {
         ArrayList<Institution> institutions = new ArrayList<>();
         this.currentUser.getPlaidItems().forEach(plaidItem -> {
             plaid.getItemDetails(plaidItem.getAccessToken()).ifPresent(itemDetails -> {
-                plaid.getInstitution(itemDetails.getInstitutionId()).ifPresent(institutions::add);
+                plaid.getInstitution(itemDetails.getInstitutionId(), plaidItem.getAccessToken()).ifPresent(institutions::add);
             });
         });
 
