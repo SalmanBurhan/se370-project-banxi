@@ -107,23 +107,30 @@ public class LinkView extends VerticalLayout {
 
     @ClientCallable
     public void exchangeToken(String publicToken) {
-        System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
+        UI ui = UI.getCurrent();
+        AsyncManager.register(this, task -> {
+            System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
 
-        IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
-        processingAnimation.setWidth(50, Unit.PERCENTAGE);
-        add(processingAnimation);
+            IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
+            processingAnimation.setWidth(50, Unit.PERCENTAGE);
 
-        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        remove(processingAnimation);
+            IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
+            successAnimation.setWidth(50, Unit.PERCENTAGE);
 
-        IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
-        successAnimation.setWidth(50, Unit.PERCENTAGE);
-        add(successAnimation);
+            task.push(() -> {
+                add(processingAnimation);
 
-        try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        remove(successAnimation);
+                try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
+                remove(processingAnimation);
 
-        System.out.println("LINK COMPLETE, REDIRECTING TO DASHBOARD");
-        UI.getCurrent().navigate("dashboard");
+                add(successAnimation);
+
+                try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
+                remove(successAnimation);
+
+                System.out.println("LINK COMPLETE, REDIRECTING TO DASHBOARD");
+                ui.navigate("dashboard");
+            });
+        });
     }
 }

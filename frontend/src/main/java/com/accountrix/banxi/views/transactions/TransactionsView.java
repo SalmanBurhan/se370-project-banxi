@@ -243,7 +243,6 @@ public class TransactionsView extends VerticalLayout {
 
     private void loadTransactions(LocalDate start, LocalDate end) {
         activityIndicator.open();
-        UI ui = UI.getCurrent();
         AsyncManager.register(this, task -> {
             List<AccountBase> userAccounts = plaid.getAccounts(currentUser);
             userAccounts.forEach(account -> accounts.put(account.getAccountId(), account));
