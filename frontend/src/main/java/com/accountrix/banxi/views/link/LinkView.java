@@ -50,12 +50,8 @@ public class LinkView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         layoutActivityIndicator();
         addDependencies();
-
-        UI ui = UI.getCurrent();
-        AsyncManager.register(this, task -> {
-            setupLink(ui);
-            task.push(activityIndicator::close);
-        });
+        setupLink();
+        activityIndicator.close();
     }
 
     private void addDependencies() {
@@ -72,24 +68,24 @@ public class LinkView extends VerticalLayout {
         activityIndicator.open();
     }
 
-    private void setupLink(UI ui) {
+    private void setupLink() {
         Optional<String> linkToken = plaid.createLinkToken(this.currentUser);
         if (linkToken.isEmpty()) {
             add(new ErrorView("An Error Occurred Preparing The Link Flow."));
         } else {
-            ui.getPage().executeJs("window.localStorage.setItem('link_token', $0);", linkToken.get());
-            ui.getPage().executeJs("""
+            UI.getCurrent().getPage().executeJs("window.localStorage.setItem('link_token', $0);", linkToken.get());
+            UI.getCurrent().getPage().executeJs("""
                 window.exchangeToken = function exchangeToken(publicToken, element) {
                     console.log("Exchanging Public Token: " + publicToken + " for Access Token");
                     element.$server.exchangeToken(publicToken);
                 }
             """);
-            injectLinkHandler(ui);
+            injectLinkHandler();
         }
     }
 
-    private void injectLinkHandler(UI ui) {
-        ui.getPage().executeJs(
+    private void injectLinkHandler() {
+        UI.getCurrent().getPage().executeJs(
         """
                     window.handler = Plaid.create({
                         token: window.localStorage.getItem("link_token"),
