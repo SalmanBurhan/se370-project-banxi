@@ -22,33 +22,50 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class PlaidConfiguration {
 
-    // Development Mode
-//    private static final String plaidClientID = "56c949d37c1539e11d919abc";
-//    private static final String plaidSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
-//    private static final String plaidEnvironment = ApiClient.Sandbox;
     // Sandbox Mode
-    private static final String plaidClientID = "645862fc1c80a20018c351a6";
-    private static final String plaidSecret = "c969234d7678433c333d9096b1d763";
-    private static final String plaidEnvironment = ApiClient.Development;
-
-    @Bean
-    public PlaidApi plaidClient() {
+    private static final String plaidSandboxClientID = "56c949d37c1539e11d919abc";
+    private static final String plaidSandboxSecret = "e2aa3bc2bc8d8f96a9d540460b8831";
+    private static final String plaidSandboxEnvironment = ApiClient.Sandbox;
+    @Bean public PlaidSandboxClient plaidSandboxClient() {
         HashMap<String, String> apiKeys = new HashMap<String, String>();
-        apiKeys.put("clientId", plaidClientID);
-        apiKeys.put("secret", plaidSecret);
+        apiKeys.put("clientId", plaidSandboxClientID);
+        apiKeys.put("secret", plaidSandboxSecret);
         apiKeys.put("plaidVersion", "2020-09-14");
         ApiClient apiClient;
         apiClient = new ApiClient(apiKeys);
-        apiClient.setPlaidAdapter(plaidEnvironment);
-        return apiClient.createService(PlaidApi.class);
+        apiClient.setPlaidAdapter(plaidSandboxEnvironment);
+        return apiClient.createService(PlaidSandboxClient.class);
     }
+    public static String getPlaidSandboxClientID() { return plaidSandboxClientID; }
+    public static String getPlaidSandboxSecret() { return plaidSandboxSecret; }
+    public static String getPlaidSandboxEnvironment() { return plaidSandboxEnvironment; }
 
-    public static String getPlaidClientID() {
-        return plaidClientID;
-    }
 
-    public static String getPlaidSecret() {
-        return plaidSecret;
+    // Development Mode
+    private static final String plaidDevelopmentClientID = "645862fc1c80a20018c351a6";
+    private static final String plaidDevelopmentSecret = "c969234d7678433c333d9096b1d763";
+    private static final String plaidDevelopmentEnvironment = ApiClient.Development;
+    @Bean public PlaidDevelopmentClient plaidDevelopmentClient() {
+        HashMap<String, String> apiKeys = new HashMap<String, String>();
+        apiKeys.put("clientId", plaidDevelopmentClientID);
+        apiKeys.put("secret", plaidDevelopmentSecret);
+        apiKeys.put("plaidVersion", "2020-09-14");
+        ApiClient apiClient;
+        apiClient = new ApiClient(apiKeys);
+        apiClient.setPlaidAdapter(plaidDevelopmentEnvironment);
+        return apiClient.createService(PlaidDevelopmentClient.class);
     }
+    public static String getPlaidDevelopmentClientID() { return plaidDevelopmentClientID; }
+    public static String getPlaidDevelopmentSecret() { return plaidDevelopmentSecret; }
+    public static String getPlaidDevelopmentEnvironment() { return plaidDevelopmentEnvironment; }
+
+
+//    public static String getPlaidClientID() {
+//        return plaidClientID;
+//    }
+//
+//    public static String getPlaidSecret() {
+//        return plaidSecret;
+//    }
 
 }
