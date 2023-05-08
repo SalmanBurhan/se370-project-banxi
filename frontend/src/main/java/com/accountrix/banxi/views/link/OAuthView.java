@@ -89,7 +89,7 @@ public class OAuthView extends VerticalLayout {
         UI ui = UI.getCurrent();
         AsyncManager.register(this, task -> {
             System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
-            if (plaid.exchangeToken(publicToken, currentUser)) {
+            if (plaid.exchangeToken(publicToken, currentUser, true)) {
                 System.out.println("LINK COMPLETED SUCCESSFULLY, REDIRECTING TO DASHBOARD");
                 task.push(() -> ui.navigate("dashboard"));
             } else {
