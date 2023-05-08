@@ -115,17 +115,18 @@ public class LinkView extends VerticalLayout {
 
         IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
         processingAnimation.setWidth(50, Unit.PERCENTAGE);
-        add(processingAnimation);
+        UI.getCurrent().accessSynchronously(() -> add(processingAnimation));
 
         try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        remove(processingAnimation);
+        UI.getCurrent().accessSynchronously(() -> remove(processingAnimation));
 
         IFrame successAnimation = new IFrame("https://embed.lottiefiles.com/animation/97240");
         successAnimation.setWidth(50, Unit.PERCENTAGE);
-        add(successAnimation);
+        UI.getCurrent().accessSynchronously(() -> add(successAnimation));
         try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
-        remove(successAnimation);
+        UI.getCurrent().accessSynchronously(() -> remove(successAnimation));
 
+        System.out.println("LINK COMPLETE, REDIRECTING TO DASHBOARD");
         UI.getCurrent().navigate("dashboard");
     }
 }
