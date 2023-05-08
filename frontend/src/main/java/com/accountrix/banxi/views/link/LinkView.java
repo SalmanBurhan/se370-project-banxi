@@ -111,11 +111,12 @@ public class LinkView extends VerticalLayout {
 
     @ClientCallable
     public void exchangeToken(String publicToken) {
+        System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
+
         IFrame processingAnimation = new IFrame("https://embed.lottiefiles.com/animation/127001");
         processingAnimation.setWidth(50, Unit.PERCENTAGE);
         add(processingAnimation);
 
-        System.out.println("Exchanging Public Token " + publicToken + " for Access Token");
         try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ignored) { }
         remove(processingAnimation);
 
