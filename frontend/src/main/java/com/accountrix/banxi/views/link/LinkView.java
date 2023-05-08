@@ -30,9 +30,7 @@ import java.util.concurrent.TimeUnit;
 @PageTitle("Banxi | Institution Link")
 @Route(value = "/link", layout = MainLayout.class)
 @PermitAll
-public class LinkView extends VerticalLayout implements BeforeEnterObserver {
-
-    private final transient AuthenticationContext authContext;
+public class LinkView extends VerticalLayout {
 
     private final transient PlaidService plaid;
 
@@ -40,10 +38,7 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
 
     private final Dialog activityIndicator = new Dialog();
 
-    private boolean oauthDetected = false;
-
     public LinkView(AuthenticationContext authContext, PlaidService plaid) {
-        this.authContext = authContext;
         this.plaid = plaid;
 
         if (authContext.getAuthenticatedUser(User.class).isEmpty()) {
@@ -55,9 +50,11 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
         layoutActivityIndicator();
         addDependencies();
+
+        UI ui = UI.getCurrent();
         AsyncManager.register(this, task -> {
-            setupLink();
-            task.push(() -> activityIndicator.setVisible(false));
+            setupLink(ui);
+            task.push(activityIndicator::close);
         });
     }
 
@@ -68,31 +65,31 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
     private void layoutActivityIndicator() {
         activityIndicator.setHeaderTitle("Preparing Link Flow");
         activityIndicator.add(new Text("This may take a few seconds"));
-        activityIndicator.setVisible(true);
         ProgressBar progressBar = new ProgressBar();
         progressBar.setIndeterminate(true);
         activityIndicator.add(progressBar);
         add(activityIndicator);
+        activityIndicator.open();
     }
 
-    private void setupLink() {
+    private void setupLink(UI ui) {
         Optional<String> linkToken = plaid.createLinkToken(this.currentUser);
         if (linkToken.isEmpty()) {
             add(new ErrorView("An Error Occurred Preparing The Link Flow."));
         } else {
-            UI.getCurrent().getPage().executeJs("window.localStorage.setItem('link_token', $0);", linkToken.get());
-            UI.getCurrent().getPage().executeJs("""
+            ui.getPage().executeJs("window.localStorage.setItem('link_token', $0);", linkToken.get());
+            ui.getPage().executeJs("""
                 window.exchangeToken = function exchangeToken(publicToken, element) {
                     console.log("Exchanging Public Token: " + publicToken + " for Access Token");
                     element.$server.exchangeToken(publicToken);
                 }
             """);
-            injectLinkHandler();
+            injectLinkHandler(ui);
         }
     }
 
-    private void injectLinkHandler() {
-        UI.getCurrent().getPage().executeJs(
+    private void injectLinkHandler(UI ui) {
+        ui.getPage().executeJs(
         """
                     window.handler = Plaid.create({
                         token: window.localStorage.getItem("link_token"),
@@ -129,39 +126,5 @@ public class LinkView extends VerticalLayout implements BeforeEnterObserver {
         remove(successAnimation);
 
         UI.getCurrent().navigate("dashboard");
-    }
-
-    private void addLinkedInstitutionsGrid() {
-        Grid<Institution> grid = new Grid<>(Institution.class, false);
-        grid.addColumn(Institution::getName).setHeader("Institution");
-        grid.addColumn(Institution::getUrl).setHeader("URL");
-
-        ArrayList<Institution> institutions = new ArrayList<>();
-        this.currentUser.getPlaidItems().forEach(plaidItem -> {
-            plaid.getItemDetails(plaidItem.getAccessToken()).ifPresent(itemDetails -> {
-                plaid.getInstitution(itemDetails.getInstitutionId()).ifPresent(institutions::add);
-            });
-        });
-
-        grid.setItems(institutions);
-        grid.setAllRowsVisible(true);
-        grid.setWidthFull();
-        add(grid);
-    }
-
-    @Override
-    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        Map<String, List<String>> parameters = beforeEnterEvent
-                .getLocation()
-                .getQueryParameters()
-                .getParameters();
-//        if(parameters.containsKey("publicToken")) {
-//            String publicToken = parameters.get("publicToken").get(0);
-//            System.out.printf("Public Token Detected: %s\n", publicToken);
-//            if (plaid.exchangeToken(publicToken, currentUser)) {
-//                // TODO: Change This To Dashboard Page Once Implemented.
-//                UI.getCurrent().navigate("transactions");
-//            }
-//        }
     }
 }

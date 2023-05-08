@@ -28,17 +28,11 @@ import java.util.concurrent.TimeUnit;
 @PermitAll
 public class OAuthView extends VerticalLayout {
 
-    private final transient AuthenticationContext authContext;
-
     private final transient PlaidService plaid;
 
     private User currentUser;
 
-    private final Dialog activityIndicator = new Dialog();
-
-
     public OAuthView(AuthenticationContext authContext, PlaidService plaid) {
-        this.authContext = authContext;
         this.plaid = plaid;
 
         if (authContext.getAuthenticatedUser(User.class).isEmpty()) {
@@ -48,25 +42,13 @@ public class OAuthView extends VerticalLayout {
         }
 
         setAlignItems(Alignment.CENTER);
-        layoutActivityIndicator();
         addDependencies();
         setupLink();
         injectLinkHandler();
-        activityIndicator.setVisible(false);
     }
 
     private void addDependencies() {
         UI.getCurrent().getPage().addJavaScript("https://cdn.plaid.com/link/v2/stable/link-initialize.js");
-    }
-
-    private void layoutActivityIndicator() {
-        activityIndicator.setHeaderTitle("Preparing Link Flow");
-        activityIndicator.add(new Text("This may take a few seconds"));
-        activityIndicator.setVisible(true);
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setIndeterminate(true);
-        activityIndicator.add(progressBar);
-        add(activityIndicator);
     }
 
     private void setupLink() {
