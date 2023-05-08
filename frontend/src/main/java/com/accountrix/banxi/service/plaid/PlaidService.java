@@ -235,7 +235,7 @@ public class PlaidService {
                 .language("en")
                 .countryCodes(Arrays.asList(CountryCode.US))
                 .products(Arrays.asList(Products.TRANSACTIONS))
-                .redirectUri("https://temecula.salmanburhan.com/link/oauth")
+                .redirectUri("https://temecula.salmanburhan.com:9999/banxi/link/oauth")
                 .user(userRequest);
 
         Response<LinkTokenCreateResponse> response = null;
