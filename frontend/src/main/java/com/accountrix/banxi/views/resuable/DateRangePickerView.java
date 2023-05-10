@@ -22,7 +22,6 @@ public class DateRangePickerView extends HorizontalLayout {
         endDate.addValueChangeListener(e -> startDate.setMax(e.getValue()));
 
         update = new Button("Update");
-        //update.addClickListener(e -> loadTransactions(startDate.getValue(), endDate.getValue()));
 
         setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         add(startDate, endDate, update);

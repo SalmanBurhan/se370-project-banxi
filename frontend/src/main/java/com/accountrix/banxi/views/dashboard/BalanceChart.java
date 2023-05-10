@@ -17,15 +17,8 @@ public class BalanceChart extends Chart {
         getConfiguration().setTitle("Historical Balances");
         getConfiguration().getyAxis().setTitle("Balance");
         getConfiguration().getxAxis().setTitle("Date");
-        //getConfiguration().addxAxis();
         addThemeVariants(ChartVariant.LUMO_GRADIENT);
     }
-
-//    public void setDateRange(Date startDate, ){
-//
-//        //getConfiguration().getyAxis().setRange();
-//        //getConfiguration().getxAxis().setRange();
-//    }
 
     public void addAccount(String accountName, Hashtable<LocalDate, Double> balanceHistory) {
         DataSeries series = new DataSeries();
@@ -46,6 +39,5 @@ public class BalanceChart extends Chart {
     private DataSeriesItem dataSeriesItem(LocalDate date, Double balance) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
         return new DataSeriesItem(date.format(formatter), balance);
-
     }
 }
