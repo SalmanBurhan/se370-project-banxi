@@ -109,7 +109,7 @@ public class TransactionsView extends VerticalLayout {
         startDate = new DatePicker("Start Date");
         endDate = new DatePicker("End Date");
 
-        startDate.setValue(LocalDate.now().minusWeeks(1));
+        startDate.setValue(LocalDate.now().minusMonths(1));
         endDate.setValue(LocalDate.now());
 
         startDate.addValueChangeListener(e -> endDate.setMin(e.getValue()));

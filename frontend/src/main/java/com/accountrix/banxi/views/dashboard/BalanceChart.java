@@ -7,15 +7,24 @@ import com.vaadin.flow.component.charts.model.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 public class BalanceChart extends Chart {
+
     public BalanceChart() {
+
         getConfiguration().getChart().setType(ChartType.AREA);
         getConfiguration().setTitle("Historical Balances");
         getConfiguration().getyAxis().setTitle("Balance");
+        getConfiguration().getxAxis().setTitle("Date");
+        //getConfiguration().addxAxis();
         addThemeVariants(ChartVariant.LUMO_GRADIENT);
+    }
+
+    public void setDateRange(Date startDate, ){
+
+        //getConfiguration().getyAxis().setRange();
+        //getConfiguration().getxAxis().setRange();
     }
 
     public void addAccount(String accountName, Hashtable<LocalDate, Double> balanceHistory) {
@@ -37,5 +46,6 @@ public class BalanceChart extends Chart {
     private DataSeriesItem dataSeriesItem(LocalDate date, Double balance) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
         return new DataSeriesItem(date.format(formatter), balance);
+
     }
 }

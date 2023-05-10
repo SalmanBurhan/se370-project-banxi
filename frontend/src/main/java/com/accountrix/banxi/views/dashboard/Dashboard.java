@@ -3,6 +3,7 @@ package com.accountrix.banxi.views.dashboard;
 import com.accountrix.banxi.model.user.User;
 import com.accountrix.banxi.service.plaid.PlaidService;
 import com.accountrix.banxi.views.MainLayout;
+import com.accountrix.banxi.views.resuable.DateRangePickerView;
 import com.plaid.client.model.AccountBase;
 import com.plaid.client.model.Transaction;
 import com.vaadin.flow.component.UI;
@@ -55,7 +56,16 @@ public class Dashboard extends VerticalLayout {
         Board board = new Board();
         board.setSizeFull();
         board.addRow(balanceChart);
-        board.addRow(new H1("some board text"));
+
+        DateRangePickerView dateRangeView = new DateRangePickerView();
+        dateRangeView.getUpdateButton().setText("Update Range");
+        dateRangeView.getUpdateButton().addClickListener(buttonClickEvent -> {
+           System.out.println("range updated");
+        });
+
+        board.addRow(dateRangeView);
+
+//        board.addRow(new H1("some board text"));
 
         add(board);
     }
