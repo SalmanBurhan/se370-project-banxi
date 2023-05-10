@@ -30,5 +30,19 @@ public class DateRangePickerView extends HorizontalLayout {
 
     public Button getUpdateButton() { return this.update; }
 
-    //public getDateRange(){return (startDate.getValue(), endDate.getValue());}
+    public DatePicker getStartDate() {
+        return startDate;
+    }
+
+    public DatePicker getEndDate() {
+        return endDate;
+    }
+
+    public LocalDate getStartDateValue() {
+        return startDate.getValue();
+    }
+
+    public LocalDate getEndDateValue() {
+        return endDate.getValue();
+    }
 }
