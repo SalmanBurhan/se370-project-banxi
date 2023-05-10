@@ -21,11 +21,11 @@ public class BalanceChart extends Chart {
         addThemeVariants(ChartVariant.LUMO_GRADIENT);
     }
 
-    public void setDateRange(Date startDate, ){
-
-        //getConfiguration().getyAxis().setRange();
-        //getConfiguration().getxAxis().setRange();
-    }
+//    public void setDateRange(Date startDate, ){
+//
+//        //getConfiguration().getyAxis().setRange();
+//        //getConfiguration().getxAxis().setRange();
+//    }
 
     public void addAccount(String accountName, Hashtable<LocalDate, Double> balanceHistory) {
         DataSeries series = new DataSeries();
