@@ -69,7 +69,6 @@ public class MainLayout extends AppLayout {
 
         AppNav nav = new AppNav();
 
-        nav.addItem(new AppNavItem("Link", LinkView.class));
         nav.addItem(new AppNavItem("Transactions", TransactionsView.class, LineAwesomeIcon.RECEIPT_SOLID.create()));
         nav.addItem(new AppNavItem("Settings", SettingsView.class, LineAwesomeIcon.TOOLS_SOLID.create()));
 

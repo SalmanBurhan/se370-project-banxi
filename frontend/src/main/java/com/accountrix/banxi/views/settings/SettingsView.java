@@ -11,8 +11,11 @@ import com.plaid.client.request.PlaidApi;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.PageTitle;
@@ -59,8 +62,13 @@ public class SettingsView extends VerticalLayout {
     }
 
     private Component linkedInstitutionsTab() {
+        Button linkButton = new Button("Link New Institution", VaadinIcon.INSTITUTION.create());
+        linkButton.addClickListener(e -> {
+            UI.getCurrent().navigate("link");
+        });
+
         Grid<Institution> grid = new Grid<>(Institution.class, false);
-        grid.addColumn(Institution::getName).setHeader("Institution");
+        grid.addColumn(Institution::getName).setHeader("Institution").setFooter(linkButton);
         grid.addColumn(Institution::getUrl).setHeader("URL");
 
         ArrayList<Institution> institutions = new ArrayList<>();
