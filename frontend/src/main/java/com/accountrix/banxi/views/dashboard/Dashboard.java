@@ -8,8 +8,6 @@ import com.plaid.client.model.AccountBase;
 import com.plaid.client.model.Transaction;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.board.Board;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -37,6 +35,9 @@ public class Dashboard extends VerticalLayout {
     private LocalDate oldestFetchDate = LocalDate.now().minusMonths(1);
 
     private final BalanceChart balanceChart = new BalanceChart();
+
+    private final PieChartView pieChartCategories = new PieChartView();
+    private HashMap<String, HashMap<String,Integer>> categoriesCountPerAccount;
     public Dashboard(AuthenticationContext authContext, PlaidService plaid) {
 
         this.authenticationContext = authContext;
@@ -56,6 +57,8 @@ public class Dashboard extends VerticalLayout {
         Board board = new Board();
         board.setSizeFull();
         board.addRow(balanceChart);
+        //TODO:Pie doesn't show up yet :(
+        board.addRow(pieChartCategories);
 
         DateRangePickerView dateRangeView = new DateRangePickerView();
         dateRangeView.getUpdateButton().setText("Update Range");
@@ -88,7 +91,10 @@ public class Dashboard extends VerticalLayout {
                     System.out.println("Updating UI");
                     balanceChart.addAccount(String.format("%s %s", account.getPersistentAccountId(), account.getName()), balances);
                 });
-
+                countCategories(account.getAccountId());
+            });
+            task.push(()-> {
+                pieChartCategories.addAccount(categoriesCountPerAccount);
             });
         });
     }
@@ -133,6 +139,35 @@ public class Dashboard extends VerticalLayout {
         System.out.printf("Historical Balance For Account: %s %s\n", accounts.get(id).getPersistentAccountId(), accounts.get(id).getName());
         System.out.println(balances);
         return balances;
+    }
+
+    private HashMap<String,HashMap <String, Integer>> countCategories(String id) {
+
+        //HashMap<String, HashMap<String, Integer>> categoriesCounter = new HashMap<>();
+
+        List<Transaction> theTransactions = transactions.get(id);
+
+        for(Transaction transaction : theTransactions ) {
+            if (transaction.getCategory().isEmpty()){
+                categoriesCountPerAccount.put("UNDEFINED", new HashMap<String, Integer>(){
+                    {put(id,+1);}
+                });
+            }
+            else {
+                String category = transaction.getCategory().get(0);
+                if (categoriesCountPerAccount.containsKey(category)) {
+                    categoriesCountPerAccount.put(category, new HashMap<String, Integer>(){
+                        {put(id,+1);}
+                    });
+                } else {
+                    categoriesCountPerAccount.put(category, new HashMap<String, Integer>(){
+                        {put(id,+1);}
+                    });
+                }
+            }
+        }
+
+        return categoriesCountPerAccount;
     }
 
 
