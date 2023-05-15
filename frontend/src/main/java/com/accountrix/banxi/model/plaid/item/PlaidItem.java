@@ -15,7 +15,7 @@ public class PlaidItem {
     @Column(name = "access_token", nullable = false, unique = true)
     private String accessToken;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = false)
 //    @JsonIgnore
     private User linkedUser;
