@@ -118,6 +118,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>apexcharts</artifactId>
+            <version>23.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons.flowingcode</groupId>
+            <artifactId>grid-exporter-addon</artifactId>
+            <version>1.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>

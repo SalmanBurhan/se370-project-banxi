@@ -1,8 +1,11 @@
 package com.accountrix.banxi.views.transactions;
 
+import com.accountrix.banxi.model.plaid.Account;
 import com.accountrix.banxi.model.user.User;
 import com.accountrix.banxi.service.plaid.PlaidService;
 import com.accountrix.banxi.views.MainLayout;
+import com.accountrix.banxi.views.reusable.TransactionGrid.TransactionGrid;
+import com.accountrix.banxi.views.reusable.TransactionGrid.TransactionGridColumn;
 import com.plaid.client.model.AccountBase;
 import com.plaid.client.model.Transaction;
 import com.vaadin.flow.component.Component;
@@ -54,8 +57,8 @@ public class TransactionsView extends VerticalLayout {
     private DatePicker startDate;
     private DatePicker endDate;
     private TextField searchField;
-    private Grid<Transaction> transactionGrid;
-    private final Hashtable<String, AccountBase> accounts = new Hashtable<>();
+    private TransactionGrid transactionGrid;
+    private final Hashtable<String, Account> accounts = new Hashtable<>();
 
     public TransactionsView(AuthenticationContext authContext, PlaidService plaid) {
 
@@ -77,7 +80,12 @@ public class TransactionsView extends VerticalLayout {
         layoutActivityIndicator();
         layoutDatePickers();
         layoutSearchField();
-        layoutTransactionsGrid();
+        transactionGrid = new TransactionGrid(TransactionGridColumn.allColumns());
+        transactionGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        transactionGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+        add(transactionGrid);
+        loadTransactions();
+        //layoutTransactionsGrid();
     }
 
     private void layoutActivityIndicator() {
@@ -133,51 +141,6 @@ public class TransactionsView extends VerticalLayout {
         add(searchField);
     }
 
-    private void layoutTransactionsGrid() {
-        transactionGrid = new Grid<>(Transaction.class, false);
-        transactionGrid.addColumn(Transaction::getDate).setHeader("Date");
-        transactionGrid.addColumn(
-                new TextRenderer<>(transaction -> {
-                    AccountBase account = accounts.get(transaction.getAccountId());
-                    return (account.getPersistentAccountId() != null
-                            && account.getPersistentAccountId().isEmpty())
-                            ? account.getName() : String.format("%s %s", account.getPersistentAccountId(), account.getName());
-                })
-        ).setHeader("Account");
-        transactionGrid.addColumn(
-                new TextRenderer<>(transaction -> {
-                    if (transaction.getMerchantName() != null) { return transaction.getMerchantName(); }
-                    else { return transaction.getName(); }
-                })
-        ).setHeader("Name");
-        transactionGrid.addColumn(
-                new ComponentRenderer<>(transaction -> {
-                    String symbol = Currency.getInstance(transaction.getIsoCurrencyCode()).getSymbol();
-                    String formatted = String.format("%s%.2f", symbol, Math.abs(transaction.getAmount()));
-                    Label text = new Label(formatted);
-                    text.addClassName((transaction.getAmount() < 0) ? LumoUtility.TextColor.SUCCESS : LumoUtility.TextColor.ERROR);
-                    return text;
-                })
-        ).setHeader("Amount");
-        transactionGrid.addColumn(
-                new TextRenderer<>(transaction -> {
-                    if (transaction.getCategory() != null && transaction.getCategory().size() > 0) {
-                        return transaction.getCategory().get(transaction.getCategory().size() - 1);
-                    }
-                    else {
-                        return "Unknown";
-                    }
-                })
-        ).setHeader("Category");
-        transactionGrid.addColumn(Transaction::getPaymentChannel).setHeader("Method");
-
-        transactionGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        transactionGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
-        transactionGrid.setVisible(false);
-        add(transactionGrid);
-        loadTransactions();
-    }
-
     private void addTransactionFilter(GridListDataView<Transaction> dataView) {
         dataView.addFilter(transaction -> {
             String searchTerm = searchField.getValue().trim();
@@ -189,10 +152,9 @@ public class TransactionsView extends VerticalLayout {
             boolean matchesName = transactionMatch(transaction.getName(), searchTerm);
             boolean matchesMethod = transactionMatch(transaction.getPaymentChannel().getValue(), searchTerm);
 
-            AccountBase account = accounts.get(transaction.getAccountId());
+            Account account = accounts.get(transaction.getAccountId());
             boolean matchesAccount = transactionMatch(
-                    (account.getPersistentAccountId() != null && account.getPersistentAccountId().isEmpty())
-                    ? account.getName() : String.format("%s %s", account.getPersistentAccountId(), account.getName()),
+                    account.getFullName(),
                     searchTerm
             );
 
@@ -244,7 +206,7 @@ public class TransactionsView extends VerticalLayout {
     private void loadTransactions(LocalDate start, LocalDate end) {
         activityIndicator.open();
         AsyncManager.register(this, task -> {
-            List<AccountBase> userAccounts = plaid.getAccounts(currentUser);
+            List<Account> userAccounts = plaid.getAccounts(currentUser);
             userAccounts.forEach(account -> accounts.put(account.getAccountId(), account));
             System.out.printf("Loaded %d Accounts For %s\n", accounts.size(), currentUser.getFullName());
             List<Transaction> transactions = plaid.getTransactions(currentUser, start, end);
@@ -252,7 +214,7 @@ public class TransactionsView extends VerticalLayout {
             task.push(() -> {
                 System.out.println("Updating UI");
                 activityIndicator.close();
-                GridListDataView<Transaction> dataView = transactionGrid.setItems(transactions);
+                GridListDataView<Transaction> dataView = transactionGrid.setData(transactions, accounts);
                 addTransactionFilter(dataView);
                 transactionGrid.setVisible(true);
             });

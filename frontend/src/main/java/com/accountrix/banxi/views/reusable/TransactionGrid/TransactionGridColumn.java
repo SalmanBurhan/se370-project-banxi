@@ -9,6 +9,7 @@ public enum TransactionGridColumn {
     ACCOUNT,
     AMOUNT,
     NAME,
+    LOCATION,
     CATEGORY,
     METHOD;
 

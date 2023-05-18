@@ -4,6 +4,7 @@ package com.accountrix.banxi.views;
 import com.accountrix.banxi.components.appnav.AppNav;
 import com.accountrix.banxi.components.appnav.AppNavItem;
 import com.accountrix.banxi.service.security.SecurityService;
+import com.accountrix.banxi.views.dashboard.Dashboard;
 import com.accountrix.banxi.views.link.LinkView;
 import com.accountrix.banxi.views.transactions.TransactionsView;
 import com.accountrix.banxi.views.settings.SettingsView;
@@ -14,6 +15,7 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -51,12 +53,16 @@ public class MainLayout extends AppLayout {
 
     private void addDrawerContent() {
 
-        Avatar avatar = new Avatar(securityService.getAuthenticatedUser().getFullName());
+        //Avatar avatar = new Avatar(securityService.getAuthenticatedUser().getFullName());
 
+        VerticalLayout headerLayout = new VerticalLayout();
         H1 appName = new H1("Banxi");
+        H4 welcomeText = new H4(String.format("Welcome, %s.", securityService.getAuthenticatedUser().getFirstName()));
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
-
-        Header header = new Header(avatar, appName);
+        welcomeText.addClassNames(LumoUtility.FontSize.MEDIUM, LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.NONE);
+        headerLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, appName, welcomeText);
+        headerLayout.add(appName, welcomeText);
+        Header header = new Header(headerLayout);
 
         Scroller scroller = new Scroller(createNavigation());
 
@@ -69,6 +75,7 @@ public class MainLayout extends AppLayout {
 
         AppNav nav = new AppNav();
 
+        nav.addItem(new AppNavItem("Dashboard", Dashboard.class, LineAwesomeIcon.CHART_LINE_SOLID.create()));
         nav.addItem(new AppNavItem("Transactions", TransactionsView.class, LineAwesomeIcon.RECEIPT_SOLID.create()));
         nav.addItem(new AppNavItem("Settings", SettingsView.class, LineAwesomeIcon.TOOLS_SOLID.create()));
 

@@ -4,7 +4,12 @@ import com.accountrix.banxi.views.reusable.ActivityIndicator;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.ChartVariant;
 import com.vaadin.flow.component.charts.model.*;
+import com.vaadin.flow.component.charts.model.style.Color;
+import com.vaadin.flow.component.charts.model.style.SolidColor;
+import com.vaadin.flow.component.charts.model.style.Style;
+import com.vaadin.flow.component.charts.themes.LumoDarkTheme;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.util.Hashtable;
 
@@ -16,12 +21,14 @@ public class CategoryChart extends Div {
 
     public CategoryChart() {
         chart.getConfiguration().getChart().setType(ChartType.PIE);
-        chart.getConfiguration().setTitle("Purchase Categories");
-        chart.getConfiguration().setSubTitle("Across All Accounts");
+//        chart.getConfiguration().setTitle("Purchase Categories");
+//        chart.getConfiguration().setSubTitle("Across All Accounts");
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
+        chart.getConfiguration().getChart().setBackgroundColor(new SolidColor(0,0,0,0));
 
         PlotOptionsPie options = new PlotOptionsPie();
         options.setInnerSize("50%");
+        options.setBorderWidth(0);
         chart.getConfiguration().setPlotOptions(options);
 
         chart.addThemeVariants(ChartVariant.MATERIAL_GRADIENT);

@@ -2,10 +2,12 @@ package com.accountrix.banxi;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
@@ -16,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  *
  */
 @SpringBootApplication
+@EnableCaching
 //@EnableAsync
 //@Push
 @Theme(value = "banxi", variant = Lumo.LIGHT)
