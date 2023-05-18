@@ -1,15 +1,18 @@
 package com.accountrix.banxi.views.dashboard;
 
+import com.accountrix.banxi.model.plaid.Account;
 import com.accountrix.banxi.views.reusable.ActivityIndicator;
 import com.accountrix.banxi.views.reusable.TransactionGrid.TransactionGrid;
 import com.accountrix.banxi.views.reusable.TransactionGrid.TransactionGridColumn;
 import com.plaid.client.model.AccountBase;
+import com.plaid.client.model.Institution;
 import com.plaid.client.model.Transaction;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class RecentTransactionsView extends VerticalLayout {
             TransactionGridColumn.ACCOUNT,
             TransactionGridColumn.NAME,
             TransactionGridColumn.AMOUNT,
+            TransactionGridColumn.LOCATION,
             TransactionGridColumn.CATEGORY
     ));
 
@@ -29,9 +33,11 @@ public class RecentTransactionsView extends VerticalLayout {
         setSpacing(false);
     }
 
-    public void setData(List<Transaction> transactionList, Hashtable<String, AccountBase> accountList) {
+    public void setData(List<Transaction> transactionList, Hashtable<String, Account> accountList) {
         this.activityIndicator.stopAnimating();
         this.transactionGrid.setData(transactionList, accountList);
+        this.transactionGrid.setAllRowsVisible(true);
+        this.transactionGrid.setHeightFull();
     }
 
     private void layoutUI() {

@@ -56,7 +56,7 @@ public class SettingsView extends VerticalLayout {
     private void layoutUI() {
         TabSheet tabSheet = new TabSheet();
         tabSheet.setWidthFull();
-        tabSheet.add("Profile", new Div());
+        //tabSheet.add("Profile", new Div());
         tabSheet.add("Linked Institutions", linkedInstitutionsTab());
         add(tabSheet);
     }
