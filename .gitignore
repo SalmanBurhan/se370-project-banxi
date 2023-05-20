@@ -6,3 +6,5 @@
 
 # VSCode Files
 .vscode/
+frontend/package.json
+frontend/package-lock.json
