@@ -13,6 +13,7 @@ certificate.p12
 tsconfig.json
 types.d.ts
 vite.config.ts
+proKey
 
 # The following files are generated/updated by vaadin-maven-plugin
 

@@ -14,7 +14,7 @@ The following properties in the `application.properties` file should be modified
 ```
 security.require-ssl = true [required to properly utilize Plaid Link Flow]
 server.ssl.key-store: path_to_p12_ssl_keystore
-server.ssl.key-store-password: password_to_key_sotre
+server.ssl.key-store-password: password_to_key_store
 server.ssl.keyStoreType: PKCS12
 server.ssl.keyAlias: 1
 
@@ -31,7 +31,7 @@ spring.datasource.password = db_password
 
 
 
-## Running the application
+## Running the Application
 
 The project is a standard Maven project. To run it from the command line,
 type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
@@ -50,7 +50,7 @@ ready to be deployed. The file can be found in the `target` folder after the bui
 Once the JAR file is built, you can run it using
 `java -jar target/banxi-1.0-SNAPSHOT.jar`
 
-## Project structure
+## Project Structure
 
 - `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
   side/top bar and the main menu). This setup uses
@@ -59,7 +59,7 @@ Once the JAR file is built, you can run it using
 - `views` folder in `frontend/` contains the client-side JavaScript views of your application.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
-## Useful links
+## Useful Links for Vaadin Flow Framework
 
 - Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
 - Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
