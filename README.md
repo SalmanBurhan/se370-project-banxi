@@ -5,6 +5,7 @@ Some components in this project utilize Vaadin Pro features which require the ne
 Once obtained, this file should be placed in the user's home directory as listed below.
 
 Windows: `%userprofile%\.vaadin\proKey`
+
 Mac/Linux: `~/.vaadin/proKey`
 
 ## Application Configuration
