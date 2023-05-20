@@ -45,15 +45,15 @@ public class Dashboard extends VerticalLayout {
 
     private final Hashtable<String, Account> accounts = new Hashtable<>();
     private final Hashtable<String, List<Transaction>> transactions = new Hashtable<>();
-    private final Hashtable<String, ClientProvidedEnrichedTransaction> enrichedTransactions = new Hashtable<>();
+    //private final Hashtable<String, ClientProvidedEnrichedTransaction> enrichedTransactions = new Hashtable<>();
     private final LocalDate oldestFetchDate = LocalDate.now().minusMonths(1);
     private ZoneId userZoneID;
 
-    private final BalanceChart balanceChart = new BalanceChart();
-    private final CategoryChart categoryChart = new CategoryChart();
-    private final RecentTransactionsView recentTransactionsView = new RecentTransactionsView();
-    private final BalanceGlanceView balanceGlanceView = new BalanceGlanceView();
-    private final HistoricalBalanceChart historicalBalanceChart = new HistoricalBalanceChart();
+//    private final BalanceChart balanceChart = new BalanceChart();
+//    private final CategoryChart categoryChart = new CategoryChart();
+//    private final RecentTransactionsView recentTransactionsView = new RecentTransactionsView();
+//    private final BalanceGlanceView balanceGlanceView = new BalanceGlanceView();
+//    private final HistoricalBalanceChart historicalBalanceChart = new HistoricalBalanceChart();
     private final LatestTransactionsView latestTransactionsView = new LatestTransactionsView();
     private final AccountsOverviewCard accountsOverviewCard = new AccountsOverviewCard();
     private final PurchaseCategoriesCard purchaseCategoriesCard = new PurchaseCategoriesCard();
@@ -123,10 +123,10 @@ public class Dashboard extends VerticalLayout {
                 Hashtable<LocalDate, Double> balances = calculateHistoricalBalanceForAccount(account.getAccountId());
                 task.push(() -> {
                     System.out.println("Updating UI");
-                    balanceGlanceView.setData(accounts);
-                    balanceChart.addAccount(account.getFullName(), balances, userZoneID, account.getInstitutionColor());
-                    categoryChart.addCategories(categories);
-                    recentTransactionsView.setData(transactions.values().stream().flatMap(List::stream).collect(Collectors.toList()), accounts);
+//                    balanceGlanceView.setData(accounts);
+//                    balanceChart.addAccount(account.getFullName(), balances, userZoneID, account.getInstitutionColor());
+//                    categoryChart.addCategories(categories);
+//                    recentTransactionsView.setData(transactions.values().stream().flatMap(List::stream).collect(Collectors.toList()), accounts);
 
                     totalBalanceLabel.setText(String.format("$%,.2f", totalBalance));
                     purchaseCategoriesCard.addCategories(categories);
@@ -158,10 +158,12 @@ public class Dashboard extends VerticalLayout {
         System.out.printf("Loading Transactions for Account: %s\n", accounts.get(accountID).getFullName());
         List<Transaction> accountTransactions = plaid.getTransactions(user, accountID, oldest, LocalDate.now());
         transactions.put(accountID, accountTransactions);
+        /*
         plaid.enrichedTransactions(accountTransactions).forEach(enriched -> {
             System.out.printf("[ENRICHED TRANSACTION] ==> %s\n", enriched);
             enrichedTransactions.put(enriched.getId(), enriched);
         });
+        */
         System.out.printf("Loaded %d Transactions for Account: %s\n", transactions.get(accountID).size(), accounts.get(accountID).getFullName());
     }
 
